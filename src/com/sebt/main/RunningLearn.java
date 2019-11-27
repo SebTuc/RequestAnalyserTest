@@ -7,6 +7,7 @@ import com.sebt.constante.Constante;
 import com.sebt.model.ModelRegression;
 import com.sebt.service.RegressionLogistiqueService;
 import com.sebt.utils.ReadFileToConvert;
+import com.sebt.utils.WriteFile;
 
 public class RunningLearn {
 
@@ -16,6 +17,7 @@ public class RunningLearn {
 		// TODO Auto-generated method stub
 
 		try {
+			
     		Map<Double,Integer> allContainsFile= new HashMap<>();
     		System.out.println("Read bad Query");
     		allContainsFile.putAll(ReadFileToConvert.getBadQuery());
@@ -41,7 +43,11 @@ public class RunningLearn {
 			
 			System.out.println("-----------------------------------------------------------------------");
 			
-			Constante.BEST_MODEL = bestModel;
+			System.out.println("Write model :");
+//			Constante.BEST_MODEL = bestModel;
+			WriteFile.saveModelLearn(bestModel);
+			
+			System.out.println("End write");
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

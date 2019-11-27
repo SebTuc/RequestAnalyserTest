@@ -147,7 +147,7 @@ public class RegressionLogistiqueService {
 			}
 			
 		}
-		
+		System.out.println("Best sigma is : "+bestSigma);
 		model.setSigma(bestSigma);
 		
 	}
@@ -282,23 +282,30 @@ public class RegressionLogistiqueService {
 			for(int i = 0; i < nbParam ; i++) {
 				Poid poidGenerate = new Poid();
 				List<Integer> exposant = new ArrayList<>();
-				exposant.add(1);
-				exposant.add(2);
-				exposant.add(3);
-				exposant.add(4);
-				exposant.add(5);
-				exposant.add(6);
-//				exposant.add(7);
-//				exposant.add(8);
-//				exposant.add(9);
-//				exposant.add(10);
-//				exposant.add(11);
+				Integer[] listExposant = {1} ;
+				for(int j = 2; j < 3; j++) {
+					if(!valueInList(listExposant,j)) {
+						exposant.add(j);	
+					}
+				}
+				
 				poidGenerate.setExposant(exposant);
 				poidGenerate.setValue(0.0);
 				modelCreate.addPoid(poidGenerate);
 			}
 			
 		return modelCreate;
+	}
+	
+	private boolean valueInList(Integer[] listExp, Integer value) {
+		
+		for(Integer i : listExp) {
+			if(value == i) {
+				return true;
+			}
+		}
+		return false;
+		
 	}
 	
 	
