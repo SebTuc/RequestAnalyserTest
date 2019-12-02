@@ -9,11 +9,11 @@ public class Constante {
 	
 	
 //	public static final String FILE_GOOD_QUERY = "goodqueries_temp_small.txt";
-	public static final String FILE_GOOD_QUERY = "goodqueries_temp.txt";
-	//public static final String FILE_GOOD_QUERY = "goodqueries.txt";
+//	public static final String FILE_GOOD_QUERY = "goodqueries_temp.txt";
+	public static final String FILE_GOOD_QUERY = "goodqueries.txt";
 //	public static final String FILE_BAD_QUERY = "badqueries_temp_small.txt";
-	public static final String FILE_BAD_QUERY = "badqueries_temp.txt";
-	//public static final String FILE_BAD_QUERY = "badqueries.txt";
+//	public static final String FILE_BAD_QUERY = "badqueries_temp.txt";
+	public static final String FILE_BAD_QUERY = "badqueries.txt";
 	
 	
 	public static final String PATH_FILE = "C:\\Dev\\Temp\\";
@@ -35,7 +35,7 @@ public class Constante {
 	
 	public static final Integer NB_ITERATION_GRADIENT = 100;
 	
-	public static final Integer SEUIL_PERCENTAGE_VALUE_VALIDE = 50;
+	public static final Integer SEUIL_PERCENTAGE_VALUE_VALIDE = 5;
 	
 	public static ModelRegression BEST_MODEL;
 	

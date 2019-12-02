@@ -88,6 +88,33 @@ public class MethodUtils {
 	}
 	
 	/**
+	 * 
+	 * @param map
+	 * @return
+	 */
+	public static String getMinAndMaxAndMeanValueInStringForMap(Map<Double,Integer> map) {
+		
+		
+		Double minValue = Double.MAX_VALUE;
+		Double maxValue = Double.MIN_VALUE;
+		Double somme = 0.0;
+		for(Map.Entry<Double, Integer> entry : map.entrySet()) {
+			Double value = entry.getKey();
+			if(value < minValue) {
+				minValue = value;
+			}
+			if(value > maxValue) {
+				maxValue = value;
+			}
+			somme+=value;
+		}
+		
+		String value = minValue.toString() + " " + maxValue.toString() + " " + (somme/map.size());
+		
+		return value;
+	}
+	
+	/**
 	 * Get min and max and mean value in one time to minimize calcul
 	 * @param list
 	 * @return
@@ -126,6 +153,17 @@ public class MethodUtils {
 		
 		return (value - meanValue)/(maxValue-minValue);
 		
+	}
+	
+	public static Map<Double,Integer> normalizeMap(Map<Double,Integer> mapValue,Double minValue, Double maxValue, Double meanValue){
+		Map<Double,Integer> newMap = new HashMap<>();
+		for(Map.Entry<Double, Integer> entry : mapValue.entrySet()) {
+			
+			newMap.put(normalizeValue(entry.getKey(),minValue,maxValue,meanValue), entry.getValue());
+			
+		}
+		
+		return newMap;
 	}
 	
 	/**
@@ -425,6 +463,5 @@ public class MethodUtils {
 		return ((computeHypoteseLogistique(x,model) - y));
 		
 	}
-
-
+	
 }

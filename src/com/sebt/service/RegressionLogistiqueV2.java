@@ -5,35 +5,34 @@ import java.util.List;
 import java.util.Map;
 
 import com.sebt.constante.Constante;
+import com.sebt.model.DataFile;
+import com.sebt.model.Dataset;
 import com.sebt.model.ModelRegression;
 import com.sebt.model.Poid;
+import com.sebt.model.RegExIndex;
 import com.sebt.utils.MethodUtils;
 
-public class RegressionLogistiqueService {
+public class RegressionLogistiqueV2 {
 	
+
 	/**
 	 * 
 	 * @param dataSet
 	 * @return
 	 */
-	public ModelRegression TrainAndFindBestModel(Map<Double,Integer> allContainsFile) {
+	public ModelRegression TrainAndFindBestModel(Dataset dataset) {
 		
-		ModelRegression testModel = CreateModelWithNParam(1);
+		RegExIndex regEx = new RegExIndex();
+		Integer nbParam = regEx.listReg.size();
 		
-//		String minMaxMean = MethodUtils.getMinAndMaxAndMeanValueInStringForMap(allContainsFile);
-//		
-//		Double minValue = Double.parseDouble(minMaxMean.split(" ")[0]);
-//		Double maxValue = Double.parseDouble(minMaxMean.split(" ")[1]);
-//		Double meanValue = Double.parseDouble(minMaxMean.split(" ")[2]);
-//		
-//		allContainsFile = MethodUtils.normalizeMap(allContainsFile,minValue,maxValue,meanValue);
-		
+		ModelRegression testModel = CreateModelWithNParam(nbParam);
+
 		System.out.println("Start sorter and spliter !");
-		Map<String,Map<Double,Integer>> allData = MethodUtils.SortAndSplitDataSet(allContainsFile);
+		Map<String,Dataset> splitedData = dataset.sortAndSplitDataSet();
 		
-		Map<Double,Integer> dataSetTrain = allData.get(Constante.DATASET_LEARN);
-		Map<Double,Integer> dataSetAjust = allData.get(Constante.DATASET_AJUST);
-		Map<Double,Integer> dataSetTest = allData.get(Constante.DATASET_TEST);
+		Dataset dataSetTrain = splitedData.get(Constante.DATASET_LEARN);
+		Dataset dataSetAjust = splitedData.get(Constante.DATASET_AJUST);
+		Dataset dataSetTest = splitedData.get(Constante.DATASET_TEST);
 		System.out.println("End sorter and spliter !");
 		try {
 			System.out.println("Start find sigma !");
@@ -68,15 +67,21 @@ public class RegressionLogistiqueService {
 	 * @param listModel
 	 * @param dataSetTrain
 	 */
-	private ModelRegression doGradientDescent(ModelRegression model,Map<Double,Integer> dataSetTrain) {
+	private ModelRegression doGradientDescent(ModelRegression model,Dataset datasetTrain) {
 		
 		// split data param input and data result output (boolean : 1 : true / 0 : false) 
-		List<Double> dataSetInput = new ArrayList<>();
+		List<List<Double>> dataSetInput = new ArrayList<>();
 		List<Integer> dataSetOutput = new ArrayList<>();
-		for (Map.Entry<Double, Integer> entry : dataSetTrain.entrySet()) {
-		
-			dataSetInput.add(entry.getKey());
-			dataSetOutput.add(entry.getValue());
+		for (DataFile dataFile : datasetTrain.getDataset()) {
+			List<Double> valueInput = new ArrayList<>();
+			for(RegExIndex reg : dataFile.getListRegEx()) {
+				
+				valueInput.add((double) reg.getNbOcurrence());
+				
+			}
+			
+			dataSetInput.add(valueInput);
+			dataSetOutput.add(dataFile.getOutput());
 
 			
 		}
@@ -84,7 +89,8 @@ public class RegressionLogistiqueService {
 
 		try {
 			
-			List<Double> valueGradient = MethodUtils.batchGradientLogistiqueOneParam(0.1,dataSetInput,dataSetOutput,model);
+			List<Double> valueGradient = MethodUtils.batchGradientLogistique(0.1,dataSetInput,dataSetOutput,model);
+//			List<Double> valueGradient = MethodUtils.batchGradientLogistiqueOneParam(0.1,dataSetInput,dataSetOutput,model);
 			model.updateAllPoid(valueGradient);
 			
 		}catch(Exception e) {
@@ -167,7 +173,7 @@ public class RegressionLogistiqueService {
 	 * @param model
 	 * @param dataSetTest
 	 */
-	private void calculScore(ModelRegression model, Map<Double,Integer> dataSetTest) throws Exception {
+	private void calculScore(ModelRegression model, Dataset dataSetTest) throws Exception {
 		
 		Double F1score = 0.0;
 		Double Recall = 0.0;
@@ -183,9 +189,9 @@ public class RegressionLogistiqueService {
 		Double TrueNegatif = 1.0;
 		
 		try {
-			for (Map.Entry<Double, Integer> entry : dataSetTest.entrySet()) {
-				Boolean realValue = (entry.getValue() == 1) ? true : false;
-				Boolean prediction = GetPrediction(entry.getKey(),model);
+			for (DataFile dataFile : dataSetTest.getDataset()) {
+				Boolean realValue = (dataFile.getOutput() == 1) ? true : false;
+				Boolean prediction = GetPrediction(dataFile.getOnlyOccurence(),model);
 				if(realValue) {
 					if(prediction) {
 						TruePositif++;
@@ -278,6 +284,23 @@ public class RegressionLogistiqueService {
 		}
 	}
 	
+	public Boolean GetPrediction(List<Double> value, ModelRegression bestModel) throws Exception {
+		
+		try {
+			
+			Double predictionPercentage = MethodUtils.computeHypoteseLogistique(value, bestModel);
+		
+			if((predictionPercentage * 100) >= Constante.SEUIL_PERCENTAGE_VALUE_VALIDE) {
+				return true;
+			}
+			
+			return false;
+			
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+	
 	
 	
 	/**
@@ -316,7 +339,5 @@ public class RegressionLogistiqueService {
 		return false;
 		
 	}
-	
-	
 
 }
