@@ -464,4 +464,15 @@ public class MethodUtils {
 		
 	}
 	
+	public static boolean valueInList(char[] listExp, char value) {
+		
+		for(char i : listExp) {
+			if(value == i) {
+				return true;
+			}
+		}
+		return false;
+		
+	}
+	
 }

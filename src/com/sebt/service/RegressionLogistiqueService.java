@@ -17,7 +17,8 @@ public class RegressionLogistiqueService {
 	 * @return
 	 */
 	public ModelRegression TrainAndFindBestModel(Map<Double,Integer> allContainsFile) {
-		
+		int loading = (Constante.NB_ITERATION_GRADIENT / 20);
+		String patternLoading = "##";
 		ModelRegression testModel = CreateModelWithNParam(1);
 		
 //		String minMaxMean = MethodUtils.getMinAndMaxAndMeanValueInStringForMap(allContainsFile);
@@ -31,22 +32,44 @@ public class RegressionLogistiqueService {
 		System.out.println("Start sorter and spliter !");
 		Map<String,Map<Double,Integer>> allData = MethodUtils.SortAndSplitDataSet(allContainsFile);
 		
+		
+		
 		Map<Double,Integer> dataSetTrain = allData.get(Constante.DATASET_LEARN);
 		Map<Double,Integer> dataSetAjust = allData.get(Constante.DATASET_AJUST);
 		Map<Double,Integer> dataSetTest = allData.get(Constante.DATASET_TEST);
+		
+		System.out.println("-----------------------------------------------------------------------");
+		System.out.println("-- Nb data for train : " + dataSetTrain.size());
+		System.out.println("-- Nb data for ajust : " + dataSetAjust.size());
+		System.out.println("-- Nb data for test :  " + dataSetTest.size());
+		System.out.println("-----------------------------------------------------------------------");
+		
+		
 		System.out.println("End sorter and spliter !");
 		try {
-			System.out.println("Start find sigma !");
+//			System.out.println("Start find sigma !");
 //			findBestSigma(testModel, dataSetAjust,dataSetTrain);
-			System.out.println("End find sigma !");
+//			System.out.println("End find sigma !");
 			
-			System.out.println("Start learning");
-			//Learn Bitch !
+			System.out.println("-- Start learning --");
+			System.out.println("Statuts loading finish :");
+			System.out.print("[");
+			for(int j =0; j <20;j++) {
+				System.out.print(patternLoading);
+			}
+			System.out.println("]");
+			System.out.println("Iteration run loading : ");
+			System.out.print("[");
+			//----------------------------------------------------------------
 			for(int i = 0; i < Constante.NB_ITERATION_GRADIENT; i++) {
+				if(i%loading == 0) {
+					System.out.print(patternLoading);
+				}
 				testModel = doGradientDescent(testModel,dataSetTrain);
 			}
-			
-			System.out.println("End learning");
+			//----------------------------------------------------------------
+			System.out.println("]");
+			System.out.println("-- End learning --");
 			
 			
 			calculScore(testModel, dataSetTest);
@@ -56,8 +79,6 @@ public class RegressionLogistiqueService {
 			System.out.println(e.getMessage());
 			
 		}
-		
-		// write the value of model in file ?
 		
 		return testModel;
 		
@@ -297,7 +318,7 @@ public class RegressionLogistiqueService {
 				Poid poidGenerate = new Poid();
 				List<Integer> exposant = new ArrayList<>();
 				Integer[] listExposant = {} ;
-				for(int j = 1; j < 10; j++) {
+				for(int j = 1; j < 6; j++) {
 					if(!valueInList(listExposant,j)) {
 						exposant.add(j);	
 					}

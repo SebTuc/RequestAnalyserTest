@@ -18,7 +18,11 @@ public class PreparedData {
 			Map<String,Integer> valueGood = ReadFileToConvert.getUseRegExGoodQuery();
 			Map<String,Data> joinValue = TransformeDataString.compareToValueReg(valueBad,valueGood);
 			WriteFile.saveDataTraining(joinValue, "test1.txt");
+			
+//			WriteFile.saveUseRegInTrainingExemple(TransformeDataString.generateDictionnary(),"testDico.txt");
 			System.out.println("End write file");
+			
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.sebt.constante.Constante;
+import com.sebt.service.TransformeDataString;
 
 public class ReadFileToConvert {
 	
@@ -111,24 +112,13 @@ public class ReadFileToConvert {
 	
 	public static Map<String,Integer> countUseRegEx(String PathFile) throws Exception {
 		
-		char[] otherCara = {',','.',':',';','"','\'','\\','/','?','!','%','*','-','+','&','(',')','[',']','{','}','=','@','#','$','_','<','>',' ','|','~'};
-//		char[] otherCara = {',','.',':','\'','\\','/','?','!','%','*','+','&','[',']','{','}','=','@','#','$','_',' ','|'};
-		
 		Map<String,Integer> containsFile = new HashMap<>();
 		File file = new File(PathFile); 
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String st;
-		
 		while ((st = br.readLine()) != null) {
-			String newWord = "";
-			for(char c : st.toCharArray()) {
-				if(!valueInList(otherCara,c)) {
-					newWord += c;
-				}else {
-					newWord += " ";
-				}
-			}
-			for(String str : newWord.split(" ")) {
+			
+			for(String str : TransformeDataString.getAllWordInRequestEscapeSpecialCaraAndNumber(st)) {
 				if(!str.equals("") && !str.equals(" ") ) {
 					
 					if(containsFile.containsKey(str)) {
@@ -145,17 +135,6 @@ public class ReadFileToConvert {
 		
 	}
 
-	private static boolean valueInList(char[] listExp, char value) {
-		
-		for(char i : listExp) {
-			if(value == i) {
-				return true;
-			}
-		}
-		return false;
-		
-	}
-	
 //	public static Map<String,Integer> countUseRegEx(String PathFile) throws Exception {
 //		
 //		String[] regExChar = {",","/","\'","\"","_","-","="," "};

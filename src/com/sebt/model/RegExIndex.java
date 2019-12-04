@@ -129,6 +129,21 @@ public class RegExIndex {
 		this.index = index;
 	}
 
+	public static Character getCharacterIndex(Integer index) throws Exception {
+		if(index > listReg.size()) {
+			throw new Exception("Index over the size of list regEx");
+		}
+		int i=0;
+		for(RegExIndex reg : listReg) {
+			if(i==index ) {
+				return reg.getCharacter().get(0);
+			}
+			i++;
+		}
+		
+		return null;
+	}
+	
 	public List<Character> getCharacter() {
 		return character;
 	}
