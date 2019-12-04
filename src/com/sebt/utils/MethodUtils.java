@@ -306,7 +306,7 @@ public class MethodUtils {
 	 */
 	public static List<Double> batchGradientLogistique(Double learningRate, List<List<Double>> dataSetInput, List<Integer> dataSetOutput, ModelRegression model) throws Exception {
 		
-		if(dataSetInput.size() != model.getListPoid().size()) {
+		if(dataSetInput.get(0).size() != model.getListPoid().size()) {
 			
 			throw new Exception(ERROR_SIZE_PARAM_TRAINING_NOT_SAME_SIZE_POID_MODEL);
 			

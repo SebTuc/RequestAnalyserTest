@@ -206,6 +206,11 @@ public class RegressionLogistiqueService {
 			
 		}
 		
+		System.out.println("True positif : " + TruePositif);
+		System.out.println("True negatif : " + TrueNegatif);
+		
+		System.out.println("False positif : " + FalsePositif);
+		System.out.println("False negatif : " + FalseNegatif);
 		
 		
 		if(TruePositif != 0) {

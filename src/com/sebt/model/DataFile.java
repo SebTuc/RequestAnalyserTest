@@ -51,9 +51,14 @@ public class DataFile {
 	
 	public List<Double> getOnlyOccurence(){
 		List<Double> list = new ArrayList<>();
+		Double somme = 0.0;
+		int index = 1;
 		for(RegExIndex reg : this.listRegEx) {
-			list.add((double)reg.getNbOcurrence());
+//			list.add((double)reg.getNbOcurrence());
+			somme += (double)reg.getNbOcurrence() * (reg.getIndex()*index);
+			index++;
 		}
+		list.add(somme);
 		return list;
 	}
 	

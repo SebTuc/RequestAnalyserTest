@@ -36,11 +36,54 @@ public class TransformeDataString {
 		return listData;
 	}
 	
+	public static Map<String,Integer> transformListDataObjectToMapOnlyPositif(Map<String,Data> dico){
+		Map<String,Integer> dictionnary = new HashMap<>();
+		for(Map.Entry<String, Data> entry : dico.entrySet()) {
+			if(entry.getValue().getOutput() == 1) {
+				dictionnary.put(entry.getKey(), entry.getValue().getOutput());
+			}
+		}
+		
+		return dictionnary;
+		
+	}
 	
-	public static Dataset transformeToDataSetForUsingInRegressionLogistique(Map<String,Integer> allValue) {
+	private static Double getMaxSimilarityPositifValue(String testValue, Map<String,Integer> dictionnary) {
+		
+		Double maxValue = Double.MIN_VALUE;
+		
+		for(Map.Entry<String, Integer> entry : dictionnary.entrySet()) {
+			if(entry.getValue() == 1) {
+				
+				Double tempValue = StringSimilarity.similarity(testValue, entry.getKey());
+				
+				if(tempValue > maxValue) {
+					maxValue = tempValue;
+				}
+			}
+			
+		}
+		if(maxValue == Double.MIN_VALUE) {
+			maxValue = 0.0000000000001;
+		}
 		
 		
-		return null;
+		return maxValue;
+		
+	}
+		
+	public static Map<Double,Integer> transformeDataToValue(Map<String,Integer> dictionnary , Map<String,Integer> allValue) {
+
+		Map<Double,Integer> feature = new HashMap<>();
+		
+		for(Map.Entry<String, Integer> entry : allValue.entrySet()) {
+				
+			feature.put(getMaxSimilarityPositifValue(entry.getKey(),dictionnary), entry.getValue());
+			
+		}
+	
+		return feature;
+		
 	}
 	
 	

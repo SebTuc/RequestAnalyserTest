@@ -19,7 +19,7 @@ public class ReadFileToConvert {
 		String st;
 		
 		while ((st = br.readLine()) != null) {
-			double test = (double) st.hashCode() / 100000000;
+			double test = (double) getQuerryHashCode(st);
 			containsFile.put(test,GoodOrNot);
 		}
 		
@@ -27,8 +27,36 @@ public class ReadFileToConvert {
 		
 		
 	}
+	
+	public static int getQuerryHashCode(String querry) {
 
+	    int hashCode = 0;
 
+	    String key = "yolo";
+
+	    int cursor = 0;
+
+	    for(char character : querry.toCharArray()){
+
+	        int querryCharCode = Character.getNumericValue(character);
+
+	        int keyCharCode = Character.getNumericValue(key.charAt(cursor));
+
+	        hashCode += (querryCharCode * keyCharCode);
+
+	        cursor++;
+
+	        if(cursor==key.length()){
+
+	            cursor = 0;
+	        }
+	    }
+
+	    hashCode += querry.length();
+
+	    return hashCode;
+	}
+	
 	public static Map<Double,Integer> getGoodQuery() throws Exception {
 
 		return getFileTransform(Constante.PATH_FILE + Constante.FILE_GOOD_QUERY,0.0,0);
@@ -68,65 +96,65 @@ public class ReadFileToConvert {
 	
 	
 	
-//	public static Map<String,Integer> getUseRegExBadQuery() throws Exception {
-//		
-//		return countUseRegEx(Constante.PATH_FILE + Constante.FILE_BAD_QUERY);
-//		
-//	}
-//	
-//	public static Map<String,Integer> getUseRegExGoodQuery() throws Exception {
-//		
-//		return countUseRegEx(Constante.PATH_FILE + Constante.FILE_GOOD_QUERY);
-//		
-//	}
+	public static Map<String,Integer> getUseRegExBadQuery() throws Exception {
+		
+		return countUseRegEx(Constante.PATH_FILE + Constante.FILE_BAD_QUERY);
+		
+	}
+	
+	public static Map<String,Integer> getUseRegExGoodQuery() throws Exception {
+		
+		return countUseRegEx(Constante.PATH_FILE + Constante.FILE_GOOD_QUERY);
+		
+	}
 	
 	
-//	public static Map<String,Integer> countUseRegEx(String PathFile) throws Exception {
-//		
-////		char[] otherCara = {',','.',':',';','"','\'','\\','/','?','!','%','*','-','+','&','(',')','[',']','{','}','=','@','#','$','_','<','>',' ','|'};
+	public static Map<String,Integer> countUseRegEx(String PathFile) throws Exception {
+		
+		char[] otherCara = {',','.',':',';','"','\'','\\','/','?','!','%','*','-','+','&','(',')','[',']','{','}','=','@','#','$','_','<','>',' ','|','~'};
 //		char[] otherCara = {',','.',':','\'','\\','/','?','!','%','*','+','&','[',']','{','}','=','@','#','$','_',' ','|'};
-//		
-//		Map<String,Integer> containsFile = new HashMap<>();
-//		File file = new File(PathFile); 
-//		BufferedReader br = new BufferedReader(new FileReader(file));
-//		String st;
-//		
-//		while ((st = br.readLine()) != null) {
-//			String newWord = "";
-//			for(char c : st.toCharArray()) {
-//				if(!valueInList(otherCara,c)) {
-//					newWord += c;
-//				}else {
-//					newWord += " ";
-//				}
-//			}
-//			for(String str : newWord.split(" ")) {
-//				if(!str.equals("") && !str.equals(" ") ) {
-//					
-//					if(containsFile.containsKey(str)) {
-//						containsFile.replace(str, containsFile.get(str) + 1);
-//					}else {
-//						containsFile.put(str, 1);
-//					}
-//				}
-//			}
-//			
-//		}
-//		
-//		return containsFile; 
-//		
-//	}
+		
+		Map<String,Integer> containsFile = new HashMap<>();
+		File file = new File(PathFile); 
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String st;
+		
+		while ((st = br.readLine()) != null) {
+			String newWord = "";
+			for(char c : st.toCharArray()) {
+				if(!valueInList(otherCara,c)) {
+					newWord += c;
+				}else {
+					newWord += " ";
+				}
+			}
+			for(String str : newWord.split(" ")) {
+				if(!str.equals("") && !str.equals(" ") ) {
+					
+					if(containsFile.containsKey(str)) {
+						containsFile.replace(str, containsFile.get(str) + 1);
+					}else {
+						containsFile.put(str, 1);
+					}
+				}
+			}
+			
+		}
+		
+		return containsFile; 
+		
+	}
 
-//	private static boolean valueInList(char[] listExp, char value) {
-//		
-//		for(char i : listExp) {
-//			if(value == i) {
-//				return true;
-//			}
-//		}
-//		return false;
-//		
-//	}
+	private static boolean valueInList(char[] listExp, char value) {
+		
+		for(char i : listExp) {
+			if(value == i) {
+				return true;
+			}
+		}
+		return false;
+		
+	}
 	
 //	public static Map<String,Integer> countUseRegEx(String PathFile) throws Exception {
 //		

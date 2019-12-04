@@ -1,21 +1,28 @@
 package com.sebt.main;
 
+import java.util.Map;
+
+import com.sebt.model.Data;
+import com.sebt.service.TransformeDataString;
+import com.sebt.utils.ReadFileToConvert;
+import com.sebt.utils.WriteFile;
+
 public class PreparedData {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-//		System.out.println("Get Value of file best use");
-//		try {
-//			Map<String,Integer> valueBad = ReadFileToConvert.getUseRegExBadQuery();
-//			Map<String,Integer> valueGood = ReadFileToConvert.getUseRegExGoodQuery();
-//			Map<String,Data> joinValue = TransformeDataString.compareToValueReg(valueBad,valueGood);
-//			WriteFile.saveDataTraining(joinValue, "test.txt");
-//			System.out.println("End write file");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			System.out.println(e.getMessage());
-//		}
+		System.out.println("Get Value of file best use");
+		try {
+			Map<String,Integer> valueBad = ReadFileToConvert.getUseRegExBadQuery();
+			Map<String,Integer> valueGood = ReadFileToConvert.getUseRegExGoodQuery();
+			Map<String,Data> joinValue = TransformeDataString.compareToValueReg(valueBad,valueGood);
+			WriteFile.saveDataTraining(joinValue, "test1.txt");
+			System.out.println("End write file");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
 		
 		try {
 //			Map<Double,Integer> valueBad = ReadFileToConvert.getFile(Constante.PATH_FILE+Constante.FILE_BAD_QUERY,1);

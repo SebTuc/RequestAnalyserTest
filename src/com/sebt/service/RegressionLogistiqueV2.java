@@ -25,7 +25,7 @@ public class RegressionLogistiqueV2 {
 		RegExIndex regEx = new RegExIndex();
 		Integer nbParam = regEx.listReg.size();
 		
-		ModelRegression testModel = CreateModelWithNParam(nbParam);
+		ModelRegression testModel = CreateModelWithNParam(1);
 
 		System.out.println("Start sorter and spliter !");
 		Map<String,Dataset> splitedData = dataset.sortAndSplitDataSet();
@@ -73,16 +73,9 @@ public class RegressionLogistiqueV2 {
 		List<List<Double>> dataSetInput = new ArrayList<>();
 		List<Integer> dataSetOutput = new ArrayList<>();
 		for (DataFile dataFile : datasetTrain.getDataset()) {
-			List<Double> valueInput = new ArrayList<>();
-			for(RegExIndex reg : dataFile.getListRegEx()) {
-				
-				valueInput.add((double) reg.getNbOcurrence());
-				
-			}
 			
-			dataSetInput.add(valueInput);
+			dataSetInput.add(dataFile.getOnlyOccurence());
 			dataSetOutput.add(dataFile.getOutput());
-
 			
 		}
 		
@@ -162,7 +155,7 @@ public class RegressionLogistiqueV2 {
 			}
 			
 		}
-		System.out.println("Best sigma is : "+bestSigma);
+		System.out.println("Best sigma is : " + bestSigma);
 		model.setSigma(bestSigma);
 		
 	}
@@ -212,6 +205,11 @@ public class RegressionLogistiqueV2 {
 			
 		}
 		
+		System.out.println("True positif : " + TruePositif);
+		System.out.println("True negatif : " + TrueNegatif);
+		
+		System.out.println("False positif : " + FalsePositif);
+		System.out.println("False negatif : " + FalseNegatif);
 		
 		
 		if(TruePositif != 0) {
