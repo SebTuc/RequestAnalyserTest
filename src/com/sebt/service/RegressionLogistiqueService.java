@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sebt.constante.Constante;
+import com.sebt.model.Data;
 import com.sebt.model.ModelRegression;
 import com.sebt.model.Poid;
 import com.sebt.utils.MethodUtils;
@@ -17,7 +18,8 @@ public class RegressionLogistiqueService {
 	 * @return
 	 */
 	public ModelRegression TrainAndFindBestModel(Map<Double,Integer> allContainsFile) {
-		int loading = (Constante.NB_ITERATION_GRADIENT / 20);
+		int percentageLoadingSizeSplit = 25;
+		int loading = (Constante.NB_ITERATION_GRADIENT / percentageLoadingSizeSplit);
 		String patternLoading = "##";
 		ModelRegression testModel = CreateModelWithNParam(1);
 		
@@ -54,7 +56,7 @@ public class RegressionLogistiqueService {
 			System.out.println("-- Start learning --");
 			System.out.println("Statuts loading finish :");
 			System.out.print("[");
-			for(int j =0; j <20;j++) {
+			for(int j =0; j <percentageLoadingSizeSplit;j++) {
 				System.out.print(patternLoading);
 			}
 			System.out.println("]");
@@ -304,7 +306,22 @@ public class RegressionLogistiqueService {
 		}
 	}
 	
-	
+	public Boolean GetPrediction(String valueTest, ModelRegression model,Map<String,Data> dico) throws Exception{
+
+		
+			Double value = TransformeDataString.sommeOfAllMatchingWord(valueTest,dico);
+		
+			Double predictionPercentage = MethodUtils.computeHypoteseLogistique(value, model);
+		
+			if((predictionPercentage * 100) >= Constante.SEUIL_PERCENTAGE_VALUE_VALIDE) {
+				return true;
+			}
+			
+			return false;
+			
+
+		
+	}
 	
 	/**
 	 * This Method generate list of model regression with different parameter setting
@@ -312,23 +329,23 @@ public class RegressionLogistiqueService {
 	 */
 	private ModelRegression CreateModelWithNParam(Integer nbParam){
 		
-			ModelRegression modelCreate = new ModelRegression();
-			
-			for(int i = 0; i < nbParam ; i++) {
-				Poid poidGenerate = new Poid();
-				List<Integer> exposant = new ArrayList<>();
-				Integer[] listExposant = {} ;
-				for(int j = 1; j < 6; j++) {
-					if(!valueInList(listExposant,j)) {
-						exposant.add(j);	
-					}
+		ModelRegression modelCreate = new ModelRegression();
+		Integer nbExposant = 4;
+		for(int i = 0; i < nbParam ; i++) {
+			Poid poidGenerate = new Poid();
+			List<Integer> exposant = new ArrayList<>();
+			Integer[] listExposant = {} ;
+			for(int j = 1; j < nbExposant + 1; j++) {
+				if(!valueInList(listExposant,j)) {
+					exposant.add(j);	
 				}
-				
-				poidGenerate.setExposant(exposant);
-				poidGenerate.setValue(0.0);
-				modelCreate.addPoid(poidGenerate);
 			}
 			
+			poidGenerate.setExposant(exposant);
+			poidGenerate.setValue(0.0);
+			modelCreate.addPoid(poidGenerate);
+		}
+		
 		return modelCreate;
 	}
 	

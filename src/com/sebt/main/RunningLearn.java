@@ -2,6 +2,7 @@ package com.sebt.main;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import com.sebt.constante.Constante;
 import com.sebt.model.Data;
@@ -26,7 +27,11 @@ public class RunningLearn {
 			Map<String,Integer> valueBad = ReadFileToConvert.getUseRegExBadQuery();
 			Map<String,Integer> valueGood = ReadFileToConvert.getUseRegExGoodQuery();
 			Map<String,Data> dico = TransformeDataString.compareToValueReg(valueBad,valueGood);
+			WriteFile.saveDataTraining(dico, "Dico.txt");
 			System.out.println("-- End create ");
+			System.out.println();
+			System.out.println("Size of dictionnary : " + dico.size());
+			System.out.println();
 			
 			
 //    		Map<Double,Integer> allContainsFile= new HashMap<>();
@@ -82,7 +87,20 @@ public class RunningLearn {
 //			Constante.BEST_MODEL = bestModel;
 			WriteFile.saveModelLearn(bestModel);
 			
+			Scanner keyboard = new Scanner(System.in);
 			System.out.println("End write");
+			while(true) {
+				System.out.print("Enter request test : ");
+				String value = keyboard.nextLine();
+				Boolean test= regService.GetPrediction(value, bestModel, dico);
+				
+				if(test) {
+					System.out.print("                    => frauduleuse\n");
+				}else {
+					System.out.print("                    => non frauduleuse\n");
+				}
+			}
+			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -90,6 +108,8 @@ public class RunningLearn {
 		}
 		
 	}
+	
+	
 	
 	
 //	private static RegressionLogistiqueV2 regService = new RegressionLogistiqueV2();

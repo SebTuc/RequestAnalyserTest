@@ -28,9 +28,9 @@ public class Constante {
 	public static final Integer PERCENTAGE_FOR_DATASET_AJUST = 00;
 	public static final Integer PERCENTAGE_FOR_DATASET_TEST = 20;
 	
-	public static final Integer NB_ITERATION_GRADIENT = 100;
+	public static final Integer NB_ITERATION_GRADIENT = 200;
 	
-	public static final Integer SEUIL_PERCENTAGE_VALUE_VALIDE =95;
+	public static final Integer SEUIL_PERCENTAGE_VALUE_VALIDE = 70;
 	
 	public static ModelRegression BEST_MODEL;
 	

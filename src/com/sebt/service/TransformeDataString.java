@@ -71,7 +71,11 @@ public class TransformeDataString {
 	
 	public static String[] getAllWordInRequestEscapeSpecialCaraAndNumber(String request){
 //		char[] otherCara = {',',':','"','\'','\\','/','?','!','%','*','+','&','(',')','[',']','{','}','=','@','#','$','_',' ','|','`','^','~'};
-		char[] otherCara = {',','.',':',';','"','\'','\\','/','?','!','%','*','-','+','&','(',')','[',']','{','}','=','@','#','$','_','<','>',' ','|','`','^','~','0','1','2','3','4','5','6','7','8','9'};
+//		char[] otherCara = {',','.',':',';','"','\'','\\','/','?','!','%','*','-','+','&','(',')','[',']','{','}','=','@','#','$','_','<','>',' ','|','`','^','~','0','1','2','3','4','5','6','7','8','9'};
+//		char[] otherCara = {',','.',':',';','"','\'','\\','/','?','!','%','*','-','+','&','(',')','[',']','{','}','=','@','#','$','_','<','>',' ','|','`','^','~'};
+//		char[] otherCara = {';','&','-','<','>',' '};
+		char[] otherCara = {';','&','-','<','>',' ','/','.','%'};
+//		char[] otherCara = {' '};
 		String newWord = "";
 		for(char c : request.toCharArray()) {
 			if(!MethodUtils.valueInList(otherCara,c)) {
@@ -122,32 +126,43 @@ public class TransformeDataString {
 	}
 	
 	public static Double sommeOfAllMatchingWord(String test, Map<String,Data> dictionnary) {
+		if(test.equals("")) {
+			return 0.0;
+		}
 		Double somme = 0.0;
-		Double bonus = 42.0;
+		Double bonus = 1000000.0;
 		double index =1.0;
 		String[] splitedString = getAllWordInRequestEscapeSpecialCaraAndNumber(test);
 		for(String st : splitedString) {
-			if(dictionnary.containsKey(st)) {
-
-				somme+= (dictionnary.get(st).getIndex() * test.length()) + st.hashCode()  ;
-//				if(dictionnary.get(st).getOutput() == 1) {
-//					
-//					somme+= ((dictionnary.get(st).getIndex() + st.hashCode())*bonus)*index  ;
-//					
-//				}else {
+			if(!st.equals("")) {
+				if(dictionnary.containsKey(st)) {
+	
+					somme+= dictionnary.get(st).getIndex() + st.hashCode();
+					if(dictionnary.get(st).getOutput() == 1) {
+						
+//						somme+= ((dictionnary.get(st).getIndex() * st.hashCode())*bonus)*index  ;
+						somme+= (dictionnary.get(st).getIndex() * index) + bonus;
+						somme += st.hashCode()/(st.length()*100) * index;
+//					}
+					}else {
+//						
+						somme+= dictionnary.get(st).getIndex() * index;
+						somme += st.hashCode()/(st.length()*100) * index;
+//						somme+= ((dictionnary.get(st).getIndex()) * st.hashCode()) *index;
+//						
+					}
 					
-//					somme+= (dictionnary.get(st).getIndex() + st.hashCode()) *index;
-					
-//				}
-				
-//				index++;
-				
-			}else {
-				somme+=st.hashCode();
+				}else {
+					// Faire une verification dans le dictionnaire si il y a une forte ressemblance avec le compare leviathan
+					somme += st.hashCode()/(st.length()*100) * index;
+				}
+				index++;
 			}
 		}
 		
-		return somme/10000000;
+		somme += test.hashCode()/(test.length()*100);
+		
+		return somme/100000000;
 	}
 	
 	public static Map<Double,Integer> transformeDataToValue(Map<String,Data> dictionnary , Map<String,Integer> allValue) {

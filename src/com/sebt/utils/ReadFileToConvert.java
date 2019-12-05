@@ -3,7 +3,9 @@ package com.sebt.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.sebt.constante.Constante;
@@ -134,7 +136,7 @@ public class ReadFileToConvert {
 		return containsFile; 
 		
 	}
-
+	
 //	public static Map<String,Integer> countUseRegEx(String PathFile) throws Exception {
 //		
 //		String[] regExChar = {",","/","\'","\"","_","-","="," "};

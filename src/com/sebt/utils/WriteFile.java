@@ -24,7 +24,7 @@ public class WriteFile {
             writer.write("Result for this model train : \n");
             writer.write("Sigma value : "+model.getSigma() + "\n");
             writer.write("--------------------------------------------- \n");
-        	writer.write("Poid number " + i + "\n");
+        	writer.write("Poid number " + i++ + "\n");
         	writer.write("Value set for fixe poid of model : " + model.getFixePoid()+ "\n");
         	writer.write("Exposant : \n");
         	writer.write("--------------------------------------------- \n \n");
